@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2, UserPlus, Shield, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
+import { friendlyError } from "@/lib/errors";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
@@ -59,8 +60,8 @@ const AdminUsuarios = () => {
       setOpen(false);
       setNome(""); setEmail(""); setPassword(""); setRole("usuario");
       load();
-    } catch (err: any) {
-      toast.error("Erro ao criar usuário", { description: err.message });
+    } catch (err: unknown) {
+      toast.error("Erro ao criar usuário", { description: friendlyError(err) });
     } finally {
       setSubmitting(false);
     }
@@ -74,8 +75,8 @@ const AdminUsuarios = () => {
       if (error) throw error;
       toast.success("Perfil atualizado");
       load();
-    } catch (err: any) {
-      toast.error("Erro ao alterar perfil", { description: err.message });
+    } catch (err: unknown) {
+      toast.error("Erro ao alterar perfil", { description: friendlyError(err) });
     }
   };
 

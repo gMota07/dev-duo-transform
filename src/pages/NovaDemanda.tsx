@@ -13,6 +13,7 @@ import {
 import { URGENCIA_OPTIONS } from "@/components/StatusBadge";
 import { ArrowLeft, Loader2, Paperclip, X } from "lucide-react";
 import { toast } from "sonner";
+import { friendlyError, validateFile, sanitizeFileName, ALLOWED_FILE_TYPES } from "@/lib/errors";
 
 interface Categoria { id: string; nome: string }
 interface Subcategoria { id: string; nome: string; categoria_id: string }
@@ -68,11 +69,12 @@ const NovaDemanda = () => {
 
       // Upload de anexos
       for (const file of files) {
-        const path = `${user.id}/${demanda.id}/${Date.now()}-${file.name}`;
+        const path = `${user.id}/${demanda.id}/${Date.now()}-${sanitizeFileName(file.name)}`;
         const { error: upErr } = await supabase.storage
           .from("demanda-anexos")
           .upload(path, file);
         if (upErr) {
+          console.error("[upload]", upErr);
           toast.error(`Falha ao anexar ${file.name}`);
           continue;
         }
@@ -88,8 +90,8 @@ const NovaDemanda = () => {
 
       toast.success("Demanda criada com sucesso!");
       navigate("/");
-    } catch (err: any) {
-      toast.error("Erro ao criar demanda", { description: err.message });
+    } catch (err: unknown) {
+      toast.error("Erro ao criar demanda", { description: friendlyError(err) });
     } finally {
       setSubmitting(false);
     }
@@ -185,14 +187,27 @@ const NovaDemanda = () => {
           <div className="space-y-2">
             <Label>Anexos</Label>
             <div className="border-2 border-dashed border-border rounded-lg p-4">
-              <label className="flex items-center justify-center gap-2 cursor-pointer text-sm text-muted-foreground hover:text-foreground">
-                <Paperclip className="h-4 w-4" />
-                <span>Clique para adicionar arquivos</span>
+              <label className="flex flex-col items-center justify-center gap-1 cursor-pointer text-sm text-muted-foreground hover:text-foreground">
+                <div className="flex items-center gap-2">
+                  <Paperclip className="h-4 w-4" />
+                  <span>Clique para adicionar arquivos</span>
+                </div>
+                <span className="text-xs">PDF, DOC, XLS, imagens · até 10 MB cada</span>
                 <input
                   type="file"
                   multiple
+                  accept={ALLOWED_FILE_TYPES.join(",")}
                   className="hidden"
-                  onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+                  onChange={(e) => {
+                    const selected = Array.from(e.target.files ?? []);
+                    const valid: File[] = [];
+                    for (const f of selected) {
+                      const err = validateFile(f);
+                      if (err) toast.error(err);
+                      else valid.push(f);
+                    }
+                    setFiles(valid);
+                  }}
                 />
               </label>
               {files.length > 0 && (

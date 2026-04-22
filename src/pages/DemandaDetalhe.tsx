@@ -12,6 +12,7 @@ import {
 import { StatusBadge, UrgenciaBadge, STATUS_OPTIONS } from "@/components/StatusBadge";
 import { ArrowLeft, Loader2, Paperclip, Download, Save } from "lucide-react";
 import { toast } from "sonner";
+import { friendlyError } from "@/lib/errors";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -137,8 +138,8 @@ const DemandaDetalhe = () => {
 
       toast.success("Demanda atualizada!");
       load();
-    } catch (e: any) {
-      toast.error("Erro ao salvar", { description: e.message });
+    } catch (e: unknown) {
+      toast.error("Erro ao salvar", { description: friendlyError(e) });
     } finally {
       setSaving(false);
     }

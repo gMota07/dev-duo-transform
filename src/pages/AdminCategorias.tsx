@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { friendlyError } from "@/lib/errors";
 
 interface Categoria { id: string; nome: string }
 interface Subcategoria { id: string; nome: string; categoria_id: string }
@@ -34,7 +35,7 @@ const AdminCategorias = () => {
     if (!novaCategoria.trim()) return;
     const { error } = await supabase.from("categorias").insert({ nome: novaCategoria.trim() });
     if (error) {
-      toast.error("Erro", { description: error.message });
+      toast.error("Não foi possível criar", { description: friendlyError(error) });
       return;
     }
     setNovaCategoria("");
@@ -45,7 +46,7 @@ const AdminCategorias = () => {
   const deleteCategoria = async (id: string) => {
     if (!confirm("Excluir esta categoria? As subcategorias também serão removidas.")) return;
     const { error } = await supabase.from("categorias").delete().eq("id", id);
-    if (error) { toast.error("Erro", { description: error.message }); return; }
+    if (error) { toast.error("Não foi possível excluir", { description: friendlyError(error) }); return; }
     toast.success("Categoria removida");
     load();
   };
@@ -54,7 +55,7 @@ const AdminCategorias = () => {
     const nome = novaSub[categoriaId]?.trim();
     if (!nome) return;
     const { error } = await supabase.from("subcategorias").insert({ categoria_id: categoriaId, nome });
-    if (error) { toast.error("Erro", { description: error.message }); return; }
+    if (error) { toast.error("Não foi possível criar", { description: friendlyError(error) }); return; }
     setNovaSub({ ...novaSub, [categoriaId]: "" });
     toast.success("Subcategoria criada");
     load();
@@ -62,7 +63,7 @@ const AdminCategorias = () => {
 
   const deleteSub = async (id: string) => {
     const { error } = await supabase.from("subcategorias").delete().eq("id", id);
-    if (error) { toast.error("Erro", { description: error.message }); return; }
+    if (error) { toast.error("Não foi possível excluir", { description: friendlyError(error) }); return; }
     toast.success("Subcategoria removida");
     load();
   };
