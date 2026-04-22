@@ -1,12 +1,27 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AppLayout } from "@/components/AppLayout";
+import Login from "./pages/Login";
+import MinhasDemandas from "./pages/MinhasDemandas";
+import NovaDemanda from "./pages/NovaDemanda";
+import DemandaDetalhe from "./pages/DemandaDetalhe";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsuarios from "./pages/AdminUsuarios";
+import AdminCategorias from "./pages/AdminCategorias";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+const HomeRedirect = () => {
+  const { role, loading } = useAuth();
+  if (loading) return null;
+  return role === "admin" ? <Navigate to="/admin" replace /> : <MinhasDemandas />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -14,11 +29,23 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+
+            <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+              <Route path="/" element={<HomeRedirect />} />
+              <Route path="/nova" element={<NovaDemanda />} />
+              <Route path="/demanda/:id" element={<DemandaDetalhe />} />
+
+              <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/usuarios" element={<ProtectedRoute requireAdmin><AdminUsuarios /></ProtectedRoute>} />
+              <Route path="/admin/categorias" element={<ProtectedRoute requireAdmin><AdminCategorias /></ProtectedRoute>} />
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
