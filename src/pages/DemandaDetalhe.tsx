@@ -107,21 +107,21 @@ const DemandaDetalhe = () => {
 
       // histórico
       if (statusChanged) {
-        await supabase.from("demanda_historico").insert({
+        await supabase.from("demanda_historico").insert([{
           demanda_id: demanda.id,
           user_id: user.id,
           acao: "status_alterado",
-          status_anterior: demanda.status,
-          status_novo: novoStatus,
-        });
+          status_anterior: demanda.status as any,
+          status_novo: novoStatus as any,
+        }]);
       }
       if (respostaChanged) {
-        await supabase.from("demanda_historico").insert({
+        await supabase.from("demanda_historico").insert([{
           demanda_id: demanda.id,
           user_id: user.id,
           acao: "resposta_adicionada",
           observacao: resposta,
-        });
+        }]);
       }
 
       // dispara emails (mudança de status e/ou resposta)
