@@ -14,16 +14,271 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categorias: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          id: string
+          nome: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          id?: string
+          nome: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
+      demanda_anexos: {
+        Row: {
+          created_at: string
+          demanda_id: string
+          id: string
+          mime_type: string | null
+          nome_arquivo: string
+          storage_path: string
+          tamanho_bytes: number | null
+          uploaded_by: string
+        }
+        Insert: {
+          created_at?: string
+          demanda_id: string
+          id?: string
+          mime_type?: string | null
+          nome_arquivo: string
+          storage_path: string
+          tamanho_bytes?: number | null
+          uploaded_by: string
+        }
+        Update: {
+          created_at?: string
+          demanda_id?: string
+          id?: string
+          mime_type?: string | null
+          nome_arquivo?: string
+          storage_path?: string
+          tamanho_bytes?: number | null
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demanda_anexos_demanda_id_fkey"
+            columns: ["demanda_id"]
+            isOneToOne: false
+            referencedRelation: "demandas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      demanda_historico: {
+        Row: {
+          acao: string
+          created_at: string
+          demanda_id: string
+          id: string
+          observacao: string | null
+          status_anterior: Database["public"]["Enums"]["demanda_status"] | null
+          status_novo: Database["public"]["Enums"]["demanda_status"] | null
+          user_id: string
+        }
+        Insert: {
+          acao: string
+          created_at?: string
+          demanda_id: string
+          id?: string
+          observacao?: string | null
+          status_anterior?: Database["public"]["Enums"]["demanda_status"] | null
+          status_novo?: Database["public"]["Enums"]["demanda_status"] | null
+          user_id: string
+        }
+        Update: {
+          acao?: string
+          created_at?: string
+          demanda_id?: string
+          id?: string
+          observacao?: string | null
+          status_anterior?: Database["public"]["Enums"]["demanda_status"] | null
+          status_novo?: Database["public"]["Enums"]["demanda_status"] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demanda_historico_demanda_id_fkey"
+            columns: ["demanda_id"]
+            isOneToOne: false
+            referencedRelation: "demandas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      demandas: {
+        Row: {
+          categoria_id: string | null
+          created_at: string
+          descricao: string
+          id: string
+          prazo_desejado: string | null
+          responsavel_id: string | null
+          resposta_admin: string | null
+          solicitante_id: string
+          status: Database["public"]["Enums"]["demanda_status"]
+          subcategoria_id: string | null
+          titulo: string
+          updated_at: string
+          urgencia: Database["public"]["Enums"]["demanda_urgencia"]
+        }
+        Insert: {
+          categoria_id?: string | null
+          created_at?: string
+          descricao: string
+          id?: string
+          prazo_desejado?: string | null
+          responsavel_id?: string | null
+          resposta_admin?: string | null
+          solicitante_id: string
+          status?: Database["public"]["Enums"]["demanda_status"]
+          subcategoria_id?: string | null
+          titulo: string
+          updated_at?: string
+          urgencia?: Database["public"]["Enums"]["demanda_urgencia"]
+        }
+        Update: {
+          categoria_id?: string | null
+          created_at?: string
+          descricao?: string
+          id?: string
+          prazo_desejado?: string | null
+          responsavel_id?: string | null
+          resposta_admin?: string | null
+          solicitante_id?: string
+          status?: Database["public"]["Enums"]["demanda_status"]
+          subcategoria_id?: string | null
+          titulo?: string
+          updated_at?: string
+          urgencia?: Database["public"]["Enums"]["demanda_urgencia"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demandas_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demandas_subcategoria_id_fkey"
+            columns: ["subcategoria_id"]
+            isOneToOne: false
+            referencedRelation: "subcategorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subcategorias: {
+        Row: {
+          ativo: boolean
+          categoria_id: string
+          created_at: string
+          id: string
+          nome: string
+        }
+        Insert: {
+          ativo?: boolean
+          categoria_id: string
+          created_at?: string
+          id?: string
+          nome: string
+        }
+        Update: {
+          ativo?: boolean
+          categoria_id?: string
+          created_at?: string
+          id?: string
+          nome?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcategorias_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "usuario"
+      demanda_status:
+        | "aberto"
+        | "em_execucao"
+        | "impedido"
+        | "cancelado"
+        | "concluido"
+      demanda_urgencia: "baixa" | "media" | "alta" | "critica"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +405,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "usuario"],
+      demanda_status: [
+        "aberto",
+        "em_execucao",
+        "impedido",
+        "cancelado",
+        "concluido",
+      ],
+      demanda_urgencia: ["baixa", "media", "alta", "critica"],
+    },
   },
 } as const
