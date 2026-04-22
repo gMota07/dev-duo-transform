@@ -1,1 +1,7 @@
 project_id = "aalploxfrbkmirnczjlb"
+
+[functions.admin-create-user]
+verify_jwt = true
+
+[functions.notify-demanda]
+verify_jwt = true
