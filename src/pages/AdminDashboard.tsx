@@ -9,9 +9,14 @@ import {
 } from "@/components/ui/select";
 import { StatusBadge, UrgenciaBadge, STATUS_OPTIONS } from "@/components/StatusBadge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, Loader2, Inbox } from "lucide-react";
+import { Search, Loader2, Inbox, ChevronDown, Eye } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface Demanda {
   id: string;
@@ -147,31 +152,63 @@ const AdminDashboard = () => {
       ) : (
         <div className="grid gap-3">
           {filtered.map((d) => (
-            <Card
-              key={d.id}
-              className="p-5 cursor-pointer hover:shadow-elegant hover:border-primary/30 transition-all"
-              onClick={() => navigate(`/demanda/${d.id}`)}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold truncate">{d.titulo}</h3>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-sm text-muted-foreground">
-                    <span className="font-medium text-foreground">{d.solicitante?.nome ?? "—"}</span>
-                    {d.categoria && <span>· {d.categoria.nome}</span>}
-                    <span>· {format(new Date(d.created_at), "dd/MM/yyyy", { locale: ptBR })}</span>
-                    {d.responsavel && (
-                      <span className="text-accent-foreground font-medium">
-                        · Resp: {d.responsavel.nome}
-                      </span>
-                    )}
+            <Collapsible key={d.id} asChild>
+              <Card className="p-4 hover:border-primary/30 transition-all">
+                {/* Linha compacta — sempre visível */}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-sm md:text-base truncate">{d.titulo}</h3>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs md:text-sm text-muted-foreground">
+                      <span className="font-medium text-foreground">{d.solicitante?.nome ?? "—"}</span>
+                      <span>· {format(new Date(d.created_at), "dd/MM/yyyy", { locale: ptBR })}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex flex-col items-end gap-1">
+                      <StatusBadge status={d.status} />
+                      <UrgenciaBadge urgencia={d.urgencia} />
+                    </div>
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <ChevronDown className="h-4 w-4 transition-transform data-[state=open]:rotate-180" />
+                      </Button>
+                    </CollapsibleTrigger>
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                  <StatusBadge status={d.status} />
-                  <UrgenciaBadge urgencia={d.urgencia} />
-                </div>
-              </div>
-            </Card>
+
+                {/* Conteúdo expandido — Leia mais */}
+                <CollapsibleContent className="mt-4 pt-4 border-t text-sm space-y-3">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div>
+                      <p className="text-muted-foreground text-xs">Categoria</p>
+                      <p className="font-medium">{d.categoria?.nome ?? "—"}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Prazo</p>
+                      <p className="font-medium">
+                        {d.prazo_desejado
+                          ? format(new Date(d.prazo_desejado + "T00:00:00"), "dd/MM/yyyy")
+                          : "—"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Responsável</p>
+                      <p className="font-medium">{d.responsavel?.nome ?? "—"}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Status</p>
+                      <p className="font-medium capitalize">{d.status.replace("_", " ")}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
+                    <Button size="sm" onClick={() => navigate(`/demanda/${d.id}`)}>
+                      <Eye className="h-4 w-4 mr-2" />
+                      Ver demanda
+                    </Button>
+                  </div>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
           ))}
         </div>
       )}
