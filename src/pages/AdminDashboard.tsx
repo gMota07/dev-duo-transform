@@ -97,6 +97,19 @@ const AdminDashboard = () => {
         </Card>
       </div>
 
+      {/* Tabs */}
+      <Tabs value={tab} onValueChange={(v) => setTab(v as any)} className="mb-6">
+        <TabsList>
+          <TabsTrigger value="pendentes">
+            Não concluídas ({demandas.filter((d) => d.status !== "concluido" && d.status !== "cancelado").length})
+          </TabsTrigger>
+          <TabsTrigger value="concluidas">
+            Concluídas ({stats.concluido})
+          </TabsTrigger>
+          <TabsTrigger value="todas">Todas ({stats.total})</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       {/* Filtros */}
       <div className="flex flex-col md:flex-row gap-3 mb-6">
         <div className="relative flex-1">
