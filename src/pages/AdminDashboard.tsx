@@ -8,6 +8,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { StatusBadge, UrgenciaBadge, STATUS_OPTIONS } from "@/components/StatusBadge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Search, Loader2, Inbox } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -30,6 +31,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("todos");
+  const [tab, setTab] = useState<"pendentes" | "todas" | "concluidas">("pendentes");
 
   useEffect(() => {
     const load = async () => {
@@ -52,7 +54,11 @@ const AdminDashboard = () => {
     const matchSearch = d.titulo.toLowerCase().includes(search.toLowerCase()) ||
       (d.solicitante?.nome ?? "").toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "todos" || d.status === statusFilter;
-    return matchSearch && matchStatus;
+    const matchTab =
+      tab === "todas" ||
+      (tab === "concluidas" && d.status === "concluido") ||
+      (tab === "pendentes" && d.status !== "concluido" && d.status !== "cancelado");
+    return matchSearch && matchStatus && matchTab;
   });
 
   const stats = {
@@ -90,6 +96,19 @@ const AdminDashboard = () => {
           <p className="text-3xl font-bold mt-1 text-status-concluido">{stats.concluido}</p>
         </Card>
       </div>
+
+      {/* Tabs */}
+      <Tabs value={tab} onValueChange={(v) => setTab(v as any)} className="mb-6">
+        <TabsList>
+          <TabsTrigger value="pendentes">
+            Não concluídas ({demandas.filter((d) => d.status !== "concluido" && d.status !== "cancelado").length})
+          </TabsTrigger>
+          <TabsTrigger value="concluidas">
+            Concluídas ({stats.concluido})
+          </TabsTrigger>
+          <TabsTrigger value="todas">Todas ({stats.total})</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {/* Filtros */}
       <div className="flex flex-col md:flex-row gap-3 mb-6">
