@@ -50,9 +50,9 @@
     --radius: 0.75rem;
 
     /* Gradientes da marca */
-    --gradient-primary: linear-gradient(135deg, hsl(262 70% 45%), hsl(230 75% 52%));
-    --gradient-soft: linear-gradient(135deg, hsl(262 70% 97%), hsl(230 75% 97%));
-    --gradient-hero: linear-gradient(135deg, hsl(262 70% 45%) 0%, hsl(245 75% 50%) 50%, hsl(230 75% 52%) 100%);
+    --gradient-primary: linear-gradient(135deg, #793E92, #1A4EA4);
+    --gradient-soft: linear-gradient(135deg, hsl(277 30% 95%), hsl(219 30% 95%));
+    --gradient-hero: linear-gradient(135deg, #793E92 0%, #5A3FA8 50%, #1A4EA4 100%);
 
     /* Sombras */
     --shadow-sm: 0 1px 2px 0 hsl(240 30% 12% / 0.05);
@@ -108,9 +108,9 @@
     --input: 240 25% 22%;
     --ring: 262 80% 65%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(262 80% 55%), hsl(230 75% 55%));
-    --gradient-soft: linear-gradient(135deg, hsl(262 40% 15%), hsl(230 40% 15%));
-    --gradient-hero: linear-gradient(135deg, hsl(262 80% 55%) 0%, hsl(245 75% 50%) 50%, hsl(230 75% 55%) 100%);
+    --gradient-primary: linear-gradient(135deg, #793E92, #1A4EA4);
+    --gradient-soft: linear-gradient(135deg, hsl(277 40% 20%), hsl(219 40% 20%));
+    --gradient-hero: linear-gradient(135deg, #793E92 0%, #5A3FA8 50%, #1A4EA4 100%);
 
     --sidebar-background: 240 30% 10%;
     --sidebar-foreground: 0 0% 95%;

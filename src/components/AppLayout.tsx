@@ -8,7 +8,6 @@ import {
   Users,
   Tags,
   LogOut,
-  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -41,11 +40,11 @@ export const AppLayout = () => {
       <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
         <div className="p-6 border-b border-sidebar-border">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-lg gradient-primary flex items-center justify-center shadow-glow">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <div className="h-9 w-9 rounded-lg overflow-hidden shadow-glow">
+              <img src="/Logo_Fs.jpg" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <h1 className="text-base font-bold text-sidebar-foreground leading-tight">FS Consultores</h1>
+              <h1 className="text-base font-bold leading-tight"><span style={{ color: '#1A4EA4' }}>fs</span><span style={{ color: '#793E92' }}>consultores</span></h1>
               <p className="text-[11px] text-muted-foreground">Sistema de Demandas</p>
             </div>
           </div>

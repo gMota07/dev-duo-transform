@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -37,9 +37,9 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl gradient-primary shadow-glow mb-4">
-            <Sparkles className="h-8 w-8 text-primary-foreground" />
+            <img src="/Logo_Fs.jpg" alt="Logo" className="w-full h-full object-cover rounded-2xl" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">FS Consultores</h1>
+          <h1 className="text-3xl font-bold"><span style={{ color: '#1A4EA4' }}>fs</span><span style={{ color: '#793E92' }}>consultores</span></h1>
           <p className="text-muted-foreground mt-1">Sistema de Demandas</p>
         </div>
 
