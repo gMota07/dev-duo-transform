@@ -54,7 +54,11 @@ const AdminDashboard = () => {
     const matchSearch = d.titulo.toLowerCase().includes(search.toLowerCase()) ||
       (d.solicitante?.nome ?? "").toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "todos" || d.status === statusFilter;
-    return matchSearch && matchStatus;
+    const matchTab =
+      tab === "todas" ||
+      (tab === "concluidas" && d.status === "concluido") ||
+      (tab === "pendentes" && d.status !== "concluido" && d.status !== "cancelado");
+    return matchSearch && matchStatus && matchTab;
   });
 
   const stats = {
