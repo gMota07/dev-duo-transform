@@ -31,6 +31,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("todos");
+  const [tab, setTab] = useState<"pendentes" | "todas" | "concluidas">("pendentes");
 
   useEffect(() => {
     const load = async () => {
