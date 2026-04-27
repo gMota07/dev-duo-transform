@@ -41,21 +41,39 @@ const AdminDemandas = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
+  const fetchDemandas = async () => {
+    const { data } = await supabase
+      .from("demandas")
+      .select(`
+        id, titulo, status, urgencia, prazo_desejado, created_at, updated_at,
+        categoria:categorias(nome),
+        solicitante:profiles!demandas_solicitante_id_fkey(nome),
+        responsavel:profiles!demandas_responsavel_id_fkey(nome)
+      `)
+      .order("created_at", { ascending: false });
+    setDemandas((data as any) ?? []);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase
-        .from("demandas")
-        .select(`
-          id, titulo, status, urgencia, prazo_desejado, created_at, updated_at,
-          categoria:categorias(nome),
-          solicitante:profiles!demandas_solicitante_id_fkey(nome),
-          responsavel:profiles!demandas_responsavel_id_fkey(nome)
-        `)
-        .order("created_at", { ascending: false });
-      setDemandas((data as any) ?? []);
-      setLoading(false);
+    fetchDemandas();
+
+    // Escuta mudanças em tempo real na tabela demandas
+    const channel = supabase
+      .channel("admin-demandas-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "demandas" },
+        () => {
+          // Recarrega as demandas com os relacionamentos completos
+          fetchDemandas();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
     };
-    load();
   }, []);
 
   const filtered = demandas.filter((d) => {
