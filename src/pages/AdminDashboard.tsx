@@ -3,19 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { StatusBadge, UrgenciaBadge, STATUS_OPTIONS } from "@/components/StatusBadge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, Loader2, Inbox, ChevronDown } from "lucide-react";
+import { Search, Loader2, Inbox } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
 interface Demanda {
@@ -37,7 +33,6 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("todos");
-  const [tab, setTab] = useState<"pendentes" | "todas" | "concluidas">("pendentes");
 
   useEffect(() => {
     const load = async () => {
@@ -60,11 +55,9 @@ const AdminDashboard = () => {
     const matchSearch = d.titulo.toLowerCase().includes(search.toLowerCase()) ||
       (d.solicitante?.nome ?? "").toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "todos" || d.status === statusFilter;
-    const matchTab =
-      tab === "todas" ||
-      (tab === "concluidas" && d.status === "concluido") ||
-      (tab === "pendentes" && d.status !== "concluido" && d.status !== "cancelado");
-    return matchSearch && matchStatus && matchTab;
+    // Dashboard mostra apenas demandas NÃO concluídas
+    const isNotCompleted = d.status !== "concluido" && d.status !== "cancelado";
+    return matchSearch && matchStatus && isNotCompleted;
   });
 
   // Calcular SLA: % de demandas concluídas dentro do prazo
@@ -109,84 +102,65 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto w-full overflow-hidden">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Dashboard de Demandas</h1>
-        <p className="text-muted-foreground mt-1">
-          Visualize, atribua e responda todas as demandas
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <Card className="p-5 gradient-primary text-primary-foreground">
-          <p className="text-sm opacity-90">Total</p>
-          <p className="text-3xl font-bold mt-1">{stats.total}</p>
+    <div className="p-3 max-w-7xl mx-auto w-full">
+      {/* Stats Resumido */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
+        <Card className="p-3 gradient-primary text-primary-foreground">
+          <p className="text-xs opacity-90">Total</p>
+          <p className="text-xl font-bold mt-0.5">{stats.total}</p>
         </Card>
-        <Card className="p-5">
-          <p className="text-sm text-muted-foreground">Abertas</p>
-          <p className="text-3xl font-bold mt-1 text-status-aberto">{stats.aberto}</p>
+        <Card className="p-3">
+          <p className="text-xs text-muted-foreground">Abertas</p>
+          <p className="text-xl font-bold mt-0.5 text-status-aberto">{stats.aberto}</p>
         </Card>
-        <Card className="p-5">
-          <p className="text-sm text-muted-foreground">Em execução</p>
-          <p className="text-3xl font-bold mt-1 text-status-execucao">{stats.execucao}</p>
+        <Card className="p-3">
+          <p className="text-xs text-muted-foreground">Em execução</p>
+          <p className="text-xl font-bold mt-0.5 text-status-execucao">{stats.execucao}</p>
         </Card>
-        <Card className="p-5">
-          <p className="text-sm text-muted-foreground">Concluídas</p>
-          <p className="text-3xl font-bold mt-1 text-status-concluido">{stats.concluido}</p>
-        </Card>
-      </div>
-
-      {/* Métricas de Desempenho */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <Card className="p-5 border-primary/50">
-          <p className="text-sm text-muted-foreground">SLA (% Concluído no Prazo)</p>
-          <p className="text-3xl font-bold mt-1" style={{ color: stats.sla >= 80 ? '#00a854' : stats.sla >= 60 ? '#f5a623' : '#d9534f' }}>
+        <Card className="p-3">
+          <p className="text-xs text-muted-foreground">SLA</p>
+          <p className="text-xl font-bold mt-0.5" style={{ color: stats.sla >= 80 ? '#00a854' : stats.sla >= 60 ? '#f5a623' : '#d9534f' }}>
             {stats.sla}%
           </p>
         </Card>
-        <Card className="p-5 border-primary/50">
-          <p className="text-sm text-muted-foreground">TMR (Tempo Médio de Resposta)</p>
-          <p className="text-3xl font-bold mt-1">{stats.tmr}h</p>
-          <p className="text-xs text-muted-foreground mt-1">{(stats.tmr * 60).toFixed(0)} minutos</p>
+      </div>
+
+      {/* Métricas Compactas */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-2">
+        <Card className="p-2 border-primary/50">
+          <p className="text-xs text-muted-foreground">TMR</p>
+          <p className="text-lg font-bold">{stats.tmr}h</p>
+          <p className="text-xs text-muted-foreground">{(stats.tmr * 60).toFixed(0)}m</p>
         </Card>
-        <Card className="p-5 border-primary/50">
-          <p className="text-sm text-muted-foreground">Tempo Médio de Conclusão</p>
-          <p className="text-3xl font-bold mt-1">{stats.tempoMedioConclusao}h</p>
-          <p className="text-xs text-muted-foreground mt-1">{(stats.tempoMedioConclusao * 60).toFixed(0)} minutos</p>
+        <Card className="p-2 border-primary/50">
+          <p className="text-xs text-muted-foreground">Conclusão</p>
+          <p className="text-lg font-bold">{stats.tempoMedioConclusao}h</p>
+          <p className="text-xs text-muted-foreground">{(stats.tempoMedioConclusao * 60).toFixed(0)}m</p>
+        </Card>
+        <Card className="p-2 border-primary/50 hidden md:block">
+          <p className="text-xs text-muted-foreground">Concluídas</p>
+          <p className="text-lg font-bold">{stats.concluido}</p>
+          <p className="text-xs text-muted-foreground">de {stats.total}</p>
         </Card>
       </div>
 
-      {/* Tabs */}
-      <Tabs value={tab} onValueChange={(v) => setTab(v as any)} className="mb-6">
-        <TabsList>
-          <TabsTrigger value="pendentes">
-            Não concluídas ({demandas.filter((d) => d.status !== "concluido" && d.status !== "cancelado").length})
-          </TabsTrigger>
-          <TabsTrigger value="concluidas">
-            Concluídas ({stats.concluido})
-          </TabsTrigger>
-          <TabsTrigger value="todas">Todas ({stats.total})</TabsTrigger>
-        </TabsList>
-      </Tabs>
-
-      {/* Filtros */}
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
+      {/* Busca compacta */}
+      <div className="flex gap-2 mb-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
           <Input
-            placeholder="Buscar por título ou solicitante..."
-            className="pl-10"
+            placeholder="Buscar demanda..."
+            className="pl-10 text-xs py-1.5"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-full md:w-56">
+          <SelectTrigger className="w-40 text-xs py-1.5">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="todos">Todos os status</SelectItem>
+            <SelectItem value="todos">Todos status</SelectItem>
             {STATUS_OPTIONS.map((o) => (
               <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
             ))}
@@ -194,68 +168,39 @@ const AdminDashboard = () => {
         </Select>
       </div>
 
-      {/* Lista */}
+      {/* Lista Compacta */}
       {loading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex justify-center py-8">
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
         </div>
       ) : filtered.length === 0 ? (
-        <Card className="p-12 text-center">
-          <Inbox className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-          <h3 className="font-semibold">Nenhuma demanda encontrada</h3>
+        <Card className="p-6 text-center">
+          <Inbox className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+          <h3 className="font-semibold text-sm">Nenhuma demanda em andamento</h3>
+          <p className="text-xs text-muted-foreground mt-1">Todas as demandas foram concluídas</p>
         </Card>
       ) : (
-        <div className="grid gap-3 w-full overflow-hidden">
+        <div className="space-y-1">
           {filtered.map((d) => (
             <Collapsible key={d.id} asChild>
-              <Card className="p-4 hover:border-primary/30 transition-all overflow-hidden w-full cursor-pointer" onClick={() => navigate(`/demanda/${d.id}`)}>
-                {/* Linha compacta — sempre visível */}
-                <div className="flex items-start justify-between gap-4 min-w-0">
+              <Card 
+                className="p-2 hover:border-primary/30 transition-all cursor-pointer text-xs" 
+                onClick={() => navigate(`/demanda/${d.id}`)}
+              >
+                <div className="flex items-center justify-between gap-2 min-w-0">
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-sm md:text-base truncate break-words line-clamp-2">{d.titulo}</h3>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs md:text-sm text-muted-foreground">
-                      <span className="font-medium text-foreground">{d.solicitante?.nome ?? "—"}</span>
-                      <span>· {format(new Date(d.created_at), "dd/MM/yyyy", { locale: ptBR })}</span>
+                    <h3 className="font-semibold line-clamp-1 text-xs">{d.titulo}</h3>
+                    <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
+                      <span>{d.solicitante?.nome ?? "—"}</span>
+                      <span>·</span>
+                      <span>{format(new Date(d.created_at), "dd/MM", { locale: ptBR })}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <div className="flex flex-col items-end gap-1">
-                      <StatusBadge status={d.status} />
-                      <UrgenciaBadge urgencia={d.urgencia} />
-                    </div>
-                    <CollapsibleTrigger asChild onClick={(e) => e.stopPropagation()}>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                        <ChevronDown className="h-4 w-4 transition-transform data-[state=open]:rotate-180" />
-                      </Button>
-                    </CollapsibleTrigger>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <StatusBadge status={d.status} />
+                    <UrgenciaBadge urgencia={d.urgencia} />
                   </div>
                 </div>
-
-                {/* Conteúdo expandido — Leia mais */}
-                <CollapsibleContent className="mt-4 pt-4 border-t text-sm space-y-3 overflow-hidden w-full">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full overflow-hidden">
-                    <div>
-                      <p className="text-muted-foreground text-xs">Categoria</p>
-                      <p className="font-medium">{d.categoria?.nome ?? "—"}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">Prazo</p>
-                      <p className="font-medium">
-                        {d.prazo_desejado
-                          ? format(new Date(d.prazo_desejado + "T00:00:00"), "dd/MM/yyyy")
-                          : "—"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">Responsável</p>
-                      <p className="font-medium">{d.responsavel?.nome ?? "—"}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">Status</p>
-                      <p className="font-medium capitalize">{d.status.replace("_", " ")}</p>
-                    </div>
-                  </div>
-                </CollapsibleContent>
               </Card>
             </Collapsible>
           ))}

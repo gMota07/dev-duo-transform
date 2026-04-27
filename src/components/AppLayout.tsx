@@ -8,6 +8,7 @@ import {
   Users,
   Tags,
   LogOut,
+  Inbox,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +29,7 @@ export const AppLayout = () => {
 
   const adminLinks = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/admin/demandas", label: "Demandas", icon: Inbox },
     { to: "/admin/usuarios", label: "Usuários", icon: Users },
     { to: "/admin/categorias", label: "Categorias", icon: Tags },
   ];
@@ -38,16 +40,8 @@ export const AppLayout = () => {
     <div className="min-h-screen flex w-full bg-background">
       {/* Sidebar */}
       <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
-        <div className="p-6 border-b border-sidebar-border">
-          <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-lg overflow-hidden shadow-glow">
-              <img src="/Logo_Fs.jpg" alt="Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold leading-tight"><span style={{ color: '#1A4EA4' }}>fs</span><span style={{ color: '#793E92' }}>consultores</span></h1>
-              <p className="text-[11px] text-muted-foreground">Sistema de Demandas</p>
-            </div>
-          </div>
+        <div className="p-6 border-b border-sidebar-border flex justify-center">
+            <img src="/logo.png" alt="Logo" className="h-10 object-contain" />
         </div>
 
         <nav className="flex-1 p-3 space-y-1">

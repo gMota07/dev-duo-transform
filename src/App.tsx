@@ -11,6 +11,7 @@ import MinhasDemandas from "./pages/MinhasDemandas";
 import NovaDemanda from "./pages/NovaDemanda";
 import DemandaDetalhe from "./pages/DemandaDetalhe";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminDemandas from "./pages/AdminDemandas";
 import AdminUsuarios from "./pages/AdminUsuarios";
 import AdminCategorias from "./pages/AdminCategorias";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/demanda/:id" element={<DemandaDetalhe />} />
 
               <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/demandas" element={<ProtectedRoute requireAdmin><AdminDemandas /></ProtectedRoute>} />
               <Route path="/admin/usuarios" element={<ProtectedRoute requireAdmin><AdminUsuarios /></ProtectedRoute>} />
               <Route path="/admin/categorias" element={<ProtectedRoute requireAdmin><AdminCategorias /></ProtectedRoute>} />
             </Route>

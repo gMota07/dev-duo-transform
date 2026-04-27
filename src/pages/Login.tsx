@@ -36,11 +36,8 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center p-4 gradient-soft">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl gradient-primary shadow-glow mb-4">
-            <img src="/Logo_Fs.jpg" alt="Logo" className="w-full h-full object-cover rounded-2xl" />
-          </div>
-          <h1 className="text-3xl font-bold"><span style={{ color: '#1A4EA4' }}>fs</span><span style={{ color: '#793E92' }}>consultores</span></h1>
-          <p className="text-muted-foreground mt-1">Sistema de Demandas</p>
+            <img src="/logo.png" alt="Logo" className="h-16 mx-auto"/>
+            <p className="text-muted-foreground mt-2">Sistema de Demandas</p>
         </div>
 
         <Card className="p-8 shadow-elegant border-border/50">
