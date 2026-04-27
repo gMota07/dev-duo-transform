@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import MinhasDemandas from "./pages/MinhasDemandas";
 import NovaDemanda from "./pages/NovaDemanda";
 import DemandaDetalhe from "./pages/DemandaDetalhe";
+import Perfil from "./pages/Perfil";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDemandas from "./pages/AdminDemandas";
 import AdminUsuarios from "./pages/AdminUsuarios";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/" element={<HomeRedirect />} />
               <Route path="/nova" element={<NovaDemanda />} />
               <Route path="/demanda/:id" element={<DemandaDetalhe />} />
+              <Route path="/perfil" element={<Perfil />} />
 
               <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
               <Route path="/admin/demandas" element={<ProtectedRoute requireAdmin><AdminDemandas /></ProtectedRoute>} />

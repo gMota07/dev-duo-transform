@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { StatusBadge, UrgenciaBadge, STATUS_OPTIONS } from "@/components/StatusBadge";
 import { Search, Loader2, Inbox } from "lucide-react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   Collapsible,
@@ -210,9 +210,15 @@ const AdminDashboard = () => {
                     <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
                       <span>{d.solicitante?.nome ?? "—"}</span>
                       <span>·</span>
-                      <span>{format(new Date(d.created_at), "dd/MM", { locale: ptBR })}</span>
+                      <span>Aberto em: {format(new Date(d.created_at), "dd/MM", { locale: ptBR })}</span>
+                      {d.prazo_desejado && (
+                        <>
+                          <span>·</span>
+                          <span>Prazo: {format(parseISO(d.prazo_desejado), "dd/MM", { locale: ptBR })}</span>
+                        </>
+                      )}
                     </div>
-                  </div>
+                  </div> 
                   <div className="flex items-center gap-1.5 shrink-0">
                     <StatusBadge status={d.status} />
                     <UrgenciaBadge urgencia={d.urgencia} />

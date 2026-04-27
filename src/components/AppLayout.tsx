@@ -9,6 +9,7 @@ import {
   Tags,
   LogOut,
   Inbox,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ export const AppLayout = () => {
   const userLinks = [
     { to: "/", label: "Minhas Demandas", icon: FileText },
     { to: "/nova", label: "Nova Demanda", icon: PlusCircle },
+    { to: "/perfil", label: "Meu Perfil", icon: Settings },
   ];
 
   const adminLinks = [
