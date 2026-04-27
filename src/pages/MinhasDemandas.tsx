@@ -96,10 +96,10 @@ const MinhasDemandas = () => {
               className="p-5 cursor-pointer hover:shadow-elegant hover:border-primary/30 transition-all"
               onClick={() => navigate(`/demanda/${d.id}`)}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold truncate">{d.titulo}</h3>
-                  <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
+              <div className="flex items-center justify-between gap-2 min-w-0">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold line-clamp-1 text-xs">{d.titulo}</h3>
+                  <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
                     {d.categoria && <span>{d.categoria.nome}</span>}
                     <span>·</span>
                     <span>
@@ -116,7 +116,7 @@ const MinhasDemandas = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <StatusBadge status={d.status} />
                   <UrgenciaBadge urgencia={d.urgencia} />
                 </div>

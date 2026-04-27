@@ -49,6 +49,23 @@ const AdminDashboard = () => {
       setLoading(false);
     };
     load();
+
+    // Escuta mudanças em tempo real na tabela demandas
+    const channel = supabase
+      .channel("admin-dashboard-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "demandas" },
+        () => {
+          // Recarrega as demandas quando há mudanças
+          load();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const filtered = demandas.filter((d) => {
