@@ -98,18 +98,17 @@ const NovaDemanda = () => {
   };
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
-      <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4">
+    <div className="p-4 max-w-3xl mx-auto">
+      <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-2">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Voltar
       </Button>
 
-      <h1 className="text-3xl font-bold mb-2">Nova Demanda</h1>
-      <p className="text-muted-foreground mb-8">Descreva sua solicitação com detalhes</p>
+      <h1 className="text-2xl font-bold mb-3">Nova Demanda</h1>
 
-      <Card className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
+      <Card className="p-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="space-y-1">
             <Label htmlFor="titulo">Título *</Label>
             <Input
               id="titulo"
@@ -121,8 +120,8 @@ const NovaDemanda = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-1">
               <Label>Categoria *</Label>
               <Select value={categoriaId} onValueChange={(v) => { setCategoriaId(v); setSubcategoriaId(""); }} required>
                 <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
@@ -134,7 +133,7 @@ const NovaDemanda = () => {
               </Select>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label>Subcategoria</Label>
               <Select value={subcategoriaId} onValueChange={setSubcategoriaId} disabled={!categoriaId || subsFiltradas.length === 0}>
                 <SelectTrigger>
@@ -148,7 +147,7 @@ const NovaDemanda = () => {
               </Select>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label>Urgência *</Label>
               <Select value={urgencia} onValueChange={setUrgencia} required>
                 <SelectTrigger><SelectValue /></SelectTrigger>
@@ -160,7 +159,7 @@ const NovaDemanda = () => {
               </Select>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="prazo">Prazo desejado</Label>
               <Input
                 id="prazo"
@@ -172,21 +171,21 @@ const NovaDemanda = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="descricao">Descrição *</Label>
             <Textarea
               id="descricao"
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descreva detalhadamente o que precisa, contexto, e qualquer informação relevante..."
-              rows={6}
+              rows={3}
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label>Anexos</Label>
-            <div className="border-2 border-dashed border-border rounded-lg p-4">
+            <div className="border-2 border-dashed border-border rounded-lg p-3">
               <label className="flex flex-col items-center justify-center gap-1 cursor-pointer text-sm text-muted-foreground hover:text-foreground">
                 <div className="flex items-center gap-2">
                   <Paperclip className="h-4 w-4" />
@@ -229,7 +228,7 @@ const NovaDemanda = () => {
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-2 pt-1">
             <Button type="submit" className="gradient-primary flex-1" disabled={submitting}>
               {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               Criar demanda

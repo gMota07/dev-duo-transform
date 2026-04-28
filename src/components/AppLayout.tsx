@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
@@ -10,11 +11,14 @@ import {
   LogOut,
   Inbox,
   Settings,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const AppLayout = () => {
   const { profile, role, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const isAdmin = role === "admin";
 
@@ -77,6 +81,24 @@ export const AppLayout = () => {
               {isAdmin ? "Administrador" : "Usuário"}
             </span>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-sidebar-foreground mb-2"
+            onClick={toggleTheme}
+          >
+            {theme === "light" ? (
+              <>
+                <Moon className="h-4 w-4 mr-2" />
+                Tema Escuro
+              </>
+            ) : (
+              <>
+                <Sun className="h-4 w-4 mr-2" />
+                Tema Claro
+              </>
+            )}
+          </Button>
           <Button
             variant="ghost"
             size="sm"

@@ -16,6 +16,7 @@ interface Demanda {
   status: any;
   urgencia: any;
   prazo_desejado: string | null;
+  resposta_admin: string | null;
   created_at: string;
   categoria: { nome: string } | null;
 }
@@ -32,7 +33,7 @@ const MinhasDemandas = () => {
     const load = async () => {
       const { data } = await supabase
         .from("demandas")
-        .select("id, titulo, status, urgencia, prazo_desejado, created_at, categoria:categorias(nome)")
+        .select("id, titulo, status, urgencia, prazo_desejado, created_at, resposta_admin, categoria:categorias(nome)")
         .eq("solicitante_id", user.id)
         .order("created_at", { ascending: false });
       setDemandas((data as any) ?? []);
@@ -108,10 +109,7 @@ const MinhasDemandas = () => {
                     {d.prazo_desejado && (
                       <>
                         <span>·</span>
-                        <span>
-                          Prazo:{" "}
-                          {format(new Date(d.prazo_desejado + "T00:00:00"), "dd/MM/yyyy")}
-                        </span>
+                        <div><p> Resposta do admin: <b>{d.resposta_admin}</b></p></div>
                       </>
                     )}
                   </div>
