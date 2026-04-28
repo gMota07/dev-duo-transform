@@ -41,7 +41,7 @@ export const AppLayout = () => {
   return (
     <div className="min-h-screen flex w-full bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
+      <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col z-50">
         <div className="p-6 border-b border-sidebar-border flex justify-center">
             <img src="/logo.png" alt="Logo" className="h-10 object-contain" />
         </div>
@@ -90,7 +90,7 @@ export const AppLayout = () => {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto ml-64">
         <Outlet />
       </main>
     </div>
