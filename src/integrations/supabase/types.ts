@@ -194,6 +194,87 @@ export type Database = {
           },
         ]
       }
+      escalas_dia: {
+        Row: {
+          ausente: boolean
+          created_at: string
+          data: string
+          hora_fim: string | null
+          hora_inicio: string | null
+          id: string
+          local: string | null
+          observacao: string | null
+          ordem: number
+          tipo_ausencia: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ausente?: boolean
+          created_at?: string
+          data: string
+          hora_fim?: string | null
+          hora_inicio?: string | null
+          id?: string
+          local?: string | null
+          observacao?: string | null
+          ordem?: number
+          tipo_ausencia?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ausente?: boolean
+          created_at?: string
+          data?: string
+          hora_fim?: string | null
+          hora_inicio?: string | null
+          id?: string
+          local?: string | null
+          observacao?: string | null
+          ordem?: number
+          tipo_ausencia?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ferias: {
+        Row: {
+          ano: number
+          created_at: string
+          data_fim: string
+          data_inicio: string
+          id: string
+          observacao: string | null
+          periodo: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ano: number
+          created_at?: string
+          data_fim: string
+          data_inicio: string
+          id?: string
+          observacao?: string | null
+          periodo: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ano?: number
+          created_at?: string
+          data_fim?: string
+          data_inicio?: string
+          id?: string
+          observacao?: string | null
+          periodo?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
