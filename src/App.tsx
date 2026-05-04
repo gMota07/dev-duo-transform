@@ -17,6 +17,8 @@ import AdminDemandas from "./pages/AdminDemandas";
 import AdminUsuarios from "./pages/AdminUsuarios";
 import AdminCategorias from "./pages/AdminCategorias";
 import AdminEmailNotifications from "./pages/AdminEmailNotifications";
+import AdminCalendario from "./pages/AdminCalendario";
+import MinhaEscala from "./pages/MinhaEscala";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,10 +44,12 @@ const App = () => (
                 <Route path="/" element={<HomeRedirect />} />
                 <Route path="/nova" element={<NovaDemanda />} />
                 <Route path="/demanda/:id" element={<DemandaDetalhe />} />
+                <Route path="/minha-escala" element={<MinhaEscala />} />
                 <Route path="/perfil" element={<Perfil />} />
 
                 <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
                 <Route path="/admin/demandas" element={<ProtectedRoute requireAdmin><AdminDemandas /></ProtectedRoute>} />
+                <Route path="/admin/calendario" element={<ProtectedRoute requireAdmin><AdminCalendario /></ProtectedRoute>} />
                 <Route path="/admin/usuarios" element={<ProtectedRoute requireAdmin><AdminUsuarios /></ProtectedRoute>} />
                 <Route path="/admin/categorias" element={<ProtectedRoute requireAdmin><AdminCategorias /></ProtectedRoute>} />
                 <Route path="/admin/email-notifications" element={<ProtectedRoute requireAdmin><AdminEmailNotifications /></ProtectedRoute>} />
