@@ -13,6 +13,7 @@ import {
   Settings,
   Sun,
   Moon,
+  CalendarDays,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -30,12 +31,14 @@ export const AppLayout = () => {
   const userLinks = [
     { to: "/", label: "Minhas Demandas", icon: FileText },
     { to: "/nova", label: "Nova Demanda", icon: PlusCircle },
+    { to: "/minha-escala", label: "Minha Escala", icon: CalendarDays },
     { to: "/perfil", label: "Meu Perfil", icon: Settings },
   ];
 
   const adminLinks = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { to: "/admin/demandas", label: "Demandas", icon: Inbox },
+    { to: "/admin/calendario", label: "Calendário Equipe", icon: CalendarDays },
     { to: "/admin/usuarios", label: "Usuários", icon: Users },
     { to: "/admin/categorias", label: "Categorias", icon: Tags },
   ];

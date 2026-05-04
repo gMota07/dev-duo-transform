@@ -44,7 +44,7 @@ const getDemandaData = async (
         status,
         solicitante_id,
         updated_at,
-        profiles:solicitante_id (email, nome)
+      profiles!demandas_solicitante_id_fkey (email, nome)
       `
       )
       .eq("id", demandaId)
@@ -55,15 +55,16 @@ const getDemandaData = async (
       return null;
     }
 
+    const profile = (demanda as any).profiles;
     return {
       demanda_id: demanda.id,
       titulo: demanda.titulo,
       descricao: demanda.descricao,
       status_novo: demanda.status,
-      status_anterior: demanda.status, // Será preenchido pelo trigger
+      status_anterior: demanda.status,
       solicitante_id: demanda.solicitante_id,
-      solicitante_email: demanda.profiles?.email || "",
-      solicitante_nome: demanda.profiles?.nome || "Usuário",
+      solicitante_email: profile?.email || "",
+      solicitante_nome: profile?.nome || "Usuário",
       updated_at: demanda.updated_at,
     };
   } catch (error) {
@@ -80,7 +81,7 @@ const checkEmailAlreadySent = async (
   tipoNotificacao: string
 ): Promise<boolean> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("demanda_email_log")
       .select("id")
       .eq("demanda_id", demandaId)
@@ -176,7 +177,7 @@ export const sendDemandaEmailNotification = async (
  */
 export const getDemandaEmailHistory = async (demandaId: string) => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("demanda_email_log")
       .select("*")
       .eq("demanda_id", demandaId)
@@ -231,7 +232,7 @@ export const retryFailedEmailNotification = async (
     }
 
     // Atualizar o log (remover erro)
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from("demanda_email_log")
       .update({ erro_envio: null })
       .eq("id", logId);
