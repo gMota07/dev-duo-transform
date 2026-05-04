@@ -81,7 +81,7 @@ const checkEmailAlreadySent = async (
   tipoNotificacao: string
 ): Promise<boolean> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("demanda_email_log")
       .select("id")
       .eq("demanda_id", demandaId)
@@ -177,7 +177,7 @@ export const sendDemandaEmailNotification = async (
  */
 export const getDemandaEmailHistory = async (demandaId: string) => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("demanda_email_log")
       .select("*")
       .eq("demanda_id", demandaId)
@@ -232,7 +232,7 @@ export const retryFailedEmailNotification = async (
     }
 
     // Atualizar o log (remover erro)
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from("demanda_email_log")
       .update({ erro_envio: null })
       .eq("id", logId);

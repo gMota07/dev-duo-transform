@@ -36,7 +36,7 @@ const AdminEmailNotifications = () => {
   const carregarLogs = async () => {
     setLoading(true);
     try {
-      let query = supabase
+      let query = (supabase as any)
         .from("demanda_email_log")
         .select("*")
         .order("created_at", { ascending: false })
